@@ -3,9 +3,13 @@
 .build/
 dist/
 
-# npm
+# dependencies for nwjs
 node_modules/
+resources/
+
+# dependencies for the app
 app/node_modules/
+app/bower_components/
 
 # sublime text editor settings
 WallpaperCuratorApp.sublime-workspace
