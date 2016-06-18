@@ -1,0 +1,15 @@
+{
+  "browser": true,
+  "esnext": true,
+  "globals": {
+    "require": true,
+    "nw": true,
+    "angular": true,
+    "_": true,
+    "console": true,
+    "backend": true
+  },
+  "strict": "global",
+  "undef": true,
+  "unused": true
+}

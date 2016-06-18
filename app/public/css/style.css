@@ -1,0 +1,16 @@
+.dupe-images ul {
+	list-style: none;
+}
+
+a:hover, a:active, a:link {
+	text-decoration: none;
+}
+
+a.toggled {
+	background: #E65E1F;
+}
+
+a.toggled>span {
+	color: white;
+	text-decoration: none;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="wpcurator">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Wallpaper Curator</title>
+	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+</head>
+<body ng-controller="MainCtrl">
+
+	<a href="#" ng-click="reload()">reload</a>
+	
+	<input type="text" ng-model="data.dir">
+	<button ng-click="setDirectory()">Check for duplicates</button> 
+	<button ng-click="purge()">Purge all selected</button>
+	<button ng-click="isRunning ? stopRandom() : startRandom()">{{ isRunning ? 'Stop' : 'Start' }}</button>
+	<p>{{ response }}</p>
+
+	<div class="dupe-images">
+		<div ng-if="!hasDupes()">
+			No duplicates!
+		</div>
+		<ul>
+			<li ng-repeat="files in data.dupes" class="row">
+				<ul>
+					<li ng-repeat="file in files" class="col-xs-3 col-md-2 col-lg-1">
+						<a href="#" class="thumbnail" ng-class="{toggled: file.toggled}" ng-click="toggleDupe(file); $event.preventDefault();">
+							<img ng-src="{{file.path}}" />
+							<span>{{ file.fileName }}</span><!-- <pre>{{debug(file.dim)}}</pre> -->
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/bower_components/lodash/dist/lodash.core.min.js"></script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./js/app.js"></script>
+<script src="./js/frontend.js"></script>
+
+</body>
+</html>
