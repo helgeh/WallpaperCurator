@@ -1,0 +1,11 @@
+
+# build folders
+.build/
+dist/
+
+# npm
+node_modules/
+app/node_modules/
+
+# sublime text editor settings
+WallpaperCuratorApp.sublime-workspace
