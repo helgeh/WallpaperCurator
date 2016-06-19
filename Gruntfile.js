@@ -15,7 +15,7 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('app/package.json'),
     nwjs: {
       'url': 'http://dl.nwjs.io',
-      'version': 'v0.14.3',
+      'version': 'v0.15.3',
       'sdkZip': 'nwjs-sdk-<%= nwjs.version %>-win-x64.zip',
       'zip': 'nwjs-<%= nwjs.version %>-win-x64.zip'
     },
