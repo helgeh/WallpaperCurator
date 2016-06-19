@@ -13,15 +13,21 @@ module.exports = function (grunt) {
           src: ['<%= paths.dist %>/*', '.build']
         }]
       },
-      'build-dir': {
+      compressed: {
         files: [{
           dot: true,
           src: ['.build/app.nw', '.build/nw.exe']
         }]
+      },
+      build: {
+        files: [{
+          dot: true,
+          src: ['.build']
+        }]
       }
     },
     copy: {
-      'nwjs': {
+      nwjs: {
         options: {
           mode: true
         },
@@ -36,7 +42,7 @@ module.exports = function (grunt) {
       }
     },
     compress: {
-      'app': {
+      app: {
         options: {
           archive: '.build/app.nw',
           mode: 'zip'
@@ -47,7 +53,7 @@ module.exports = function (grunt) {
           src: ['**']
         }]
       },
-      'dist': {
+      dist: {
         options: {
           archive: '<%= paths.dist %>/<%= pkg.name %>.zip'
         },
@@ -86,8 +92,9 @@ module.exports = function (grunt) {
         'copy:nwjs',
         'compress:app',
         'build-app',
-        'clean:build-dir',
-        'compress:dist'
+        'clean:compressed',
+        'compress:dist',
+        'clean:build'
       ]);
     }
     else {
