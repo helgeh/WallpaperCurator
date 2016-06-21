@@ -1,14 +1,7 @@
 'use strict';
 
 
-var app = angular.module('wpcurator', []);
-
-app.config(function( $compileProvider ) {   
-	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
-  // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
-});
-
-app.controller('MainCtrl', function($scope, $http, $interval) {
+app.controller('MainCtrl', function($scope, $http, $interval, Backend) {
 
 	var allFiles;
 
@@ -18,9 +11,7 @@ app.controller('MainCtrl', function($scope, $http, $interval) {
 	};
 
 	function setDirectory() {
-		backend.getFiles($scope.data.dir).then(function(response) {
-			if (response.status != 'ok') 
-				console.log(response.errs);
+		Backend.getFiles($scope.data.dir).then(function(response) {
 			$scope.$apply(function(){
 				$scope.response = response.status;
 				if (response.files) {
@@ -59,13 +50,13 @@ app.controller('MainCtrl', function($scope, $http, $interval) {
 			.forEach(function(item){result.push(item);});
 			return result;
 		}, []);
-		backend.deleteFiles(toDelete).then(function () {
+		Backend.deleteFiles(toDelete).then(function () {
 			setDirectory();
 		});
 	}
 
 	function reload() {
-		backend.win.reload();
+		Backend.win.reload();
 	}
 
 	var random;
@@ -85,7 +76,7 @@ app.controller('MainCtrl', function($scope, $http, $interval) {
 		counter = Math.min(allFiles.length-1, counter+1);
 		var path = allFiles[counter].path;
 		path = path.replace(/\\/g, '\\\\');
-		backend.setWallpaper(path);
+		Backend.setWallpaper(path);
 	}
 
 	$scope.setDirectory = setDirectory;
@@ -98,7 +89,7 @@ app.controller('MainCtrl', function($scope, $http, $interval) {
 	$scope.isRunning = false;
 
 
-	backend.getFiles($scope.data.dir).then(function(response) {
+	Backend.getFiles($scope.data.dir).then(function(response) {
 		$scope.$apply(function(){
 			$scope.response = response.status;
 			if (response.files) {
