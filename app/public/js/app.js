@@ -2,14 +2,22 @@
 
 var _ = require('lodash');
 
-var app = angular.module('WallpaperCurator', []);
+angular.module('WallpaperCurator', [
+	'WallpaperCurator.main',
+	'WallpaperCurator.files'
+])
 
-app.config(function( $compileProvider ) {   
+.config(function($compileProvider) {
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
   // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
 });
 
-app.factory('Backend', function () {
+
+angular.module('WallpaperCurator.files', []);
+
+angular.module('WallpaperCurator.files')
+
+.factory('Backend', function () {
 	var q = require('q');
 	var fs = require('fs');
 	var path = require('path');
