@@ -28,7 +28,8 @@
 					<li ng-repeat="file in files" class="col-xs-3 col-md-2 col-lg-1">
 						<a href="#" class="thumbnail" ng-class="{toggled: file.toggled}" ng-click="toggleDupe(file); $event.preventDefault();">
 							<img ng-src="{{file.path}}" />
-							<span>{{ file.fileName }}</span><!-- <pre>{{debug(file.dim)}}</pre> -->
+							<span>{{ file.fileName }}</span> | 
+							<span>{{ file.dim.width }}x{{ file.dim.height }}</span>
 						</a>
 					</li>
 				</ul>

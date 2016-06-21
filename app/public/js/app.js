@@ -6,7 +6,6 @@ var backend = (function() {
 	var q = require('q');
 	var fs = require('fs');
 	var path = require('path');
-	var gm = require('gm');
 	var win = nw.Window.get();
 
 	var wallpaper = require('wallpaper');
@@ -16,24 +15,27 @@ var backend = (function() {
 
 	function getFiles(dir) {
 		currentDirectory = dir;
-		return readDir();
-			// .then(getDimensions);
+		return readDir()
+			.then(getDimensions);
 	}
 
-	var getDimensions = function(files) {
-		var deferred =q.defer();
+	var getDimensions = function(response) {
+		var files = response.files;
+		var deferred = q.defer();
 		var errs = [];
 		var done = _.after(files.length, function() {
 			if (errs.length > 0) 
-				deferred.resolve(errs, files);
+				deferred.resolve({status: 'errors', files: files, errs: errs});
 			else 
-				deferred.resolve(null, files);
+				deferred.resolve({status: 'ok', files: files});
 		});
-		gm(file.path).size(function(err, value) {
-			if (err)
-				errs.push(err);
-			if (value)
-				file.dim = value;
+		_.forEach(files, function(file){
+			var sizeOf = require('image-size');
+			var dimensions = sizeOf(file.path);
+			if (dimensions) 
+				file.dim = dimensions;
+			else
+				errs.push(new Error('Could not find dimensions for image ' + file.path));
 			done();
 		});
 		return deferred.promise;

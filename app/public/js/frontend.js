@@ -19,12 +19,12 @@ app.controller('MainCtrl', function($scope, $http, $interval) {
 
 	function setDirectory() {
 		backend.getFiles($scope.data.dir).then(function(response) {
+			if (response.status != 'ok') 
+				console.log(response.errs);
 			$scope.$apply(function(){
 				$scope.response = response.status;
-				console.log(response);
 				if (response.files) {
 					allFiles = response.files;
-					console.log(allFiles);
 					$scope.data.dupes = getDupes(allFiles);
 				}
 			});
