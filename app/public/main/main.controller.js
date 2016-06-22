@@ -1,9 +1,5 @@
 'use strict';
 
-angular.module('WallpaperCurator.main', [
-	'WallpaperCurator.files'
-]);
-
 angular.module('WallpaperCurator.main')
 
 .controller('MainCtrl', function($scope, $http, $interval, Backend) {
