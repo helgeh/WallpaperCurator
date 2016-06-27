@@ -1,0 +1,11 @@
+body {
+	background-color: initial;
+}
+
+.init * {
+	display: none;
+}
+
+.init .loader {
+	display: block;
+}

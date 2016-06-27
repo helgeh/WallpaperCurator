@@ -6,9 +6,15 @@
 	<title>Wallpaper Curator</title>
 	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="./app.css">
 	<link rel="stylesheet" type="text/css" href="./main/main.css">
 </head>
-<body ng-controller="MainCtrl">
+<body>
+<div ng-controller="MainCtrl" ng-class="{init: !initialized}" class="main">
+
+	<div class="well loader" ng-hide="initialized">
+		<p>Loading!</p>
+	</div>
 
 	<input type="text" ng-model="data.dir">
 	<button ng-click="setDirectory()">Check for duplicates</button> 
@@ -34,6 +40,7 @@
 			</li>
 		</ul>
 	</div>
+</div>
 
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
 <script src="/bower_components/lodash/dist/lodash.core.min.js"></script>
@@ -41,6 +48,9 @@
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <script src="./app.js"></script>
+<script src="./assets/assets.module.js"></script>
+<script src="./desktop/desktop.module.js"></script>
+<script src="./desktop/desktop.service.js"></script>
 <script src="./files/files.module.js"></script>
 <script src="./files/files.service.js"></script>
 <script src="./main/main.module.js"></script>

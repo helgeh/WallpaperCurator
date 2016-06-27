@@ -84,12 +84,15 @@ angular.module('WallpaperCurator.main')
 	$scope.stopRandom = stopRandom;
 	$scope.isRunning = false;
 
+	$scope.initialized = false;
+
 
 	Backend.getFiles($scope.data.dir).then(function(response) {
 		$scope.$apply(function(){
 			$scope.response = response.status;
 			if (response.files) {
 				allFiles = response.files;
+				$scope.initialized = true;
 			}
 		});
 	});
