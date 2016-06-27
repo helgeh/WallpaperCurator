@@ -4,57 +4,9 @@ angular.module('WallpaperCurator.main')
 
 .controller('MainCtrl', function($scope, $interval, Backend) {
 
-	var allFiles;
-
-	$scope.response = "";
 	$scope.data = {
 		dir: 'D:\\test\\'
 	};
-
-	function setDirectory() {
-		Backend.getFiles($scope.data.dir).then(function(response) {
-			$scope.$apply(function(){
-				$scope.response = response.status;
-				if (response.files) {
-					allFiles = response.files;
-					$scope.data.dupes = getDupes(allFiles);
-				}
-			});
-		});
-	}
-
-	function getDupes(files) {
-		var sorted = _.sortBy(_.sortBy(files, 'fileName.size').reverse(), 'size');
-		return _.reduce(sorted, function(result, item, index, coll) {
-			var dupes = _.filter(coll, {size: item.size});
-			if (dupes && dupes.length > 1) {
-				var min = _.min(_.map(dupes, 'fileName.length'));
-				var firstOfItsSize = !(result[item.size]);
-				item.toggled = !firstOfItsSize;
-				(result[item.size] || (result[item.size] = [])).push(item);
-			}
-			return result;
-		}, {});
-	}
-
-	function hasDupes() {
-		return _.keys($scope.data.dupes).length > 0;
-	}
-
-	function toggleDupe(file) {
-		file.toggled = !file.toggled;
-	}
-
-	function purge() {
-		var toDelete = _.reduce($scope.data.dupes, function(result, value/*, key*/) {
-			_.filter(value, function(item){ return item.toggled; })
-			.forEach(function(item){result.push(item);});
-			return result;
-		}, []);
-		Backend.deleteFiles(toDelete).then(function () {
-			setDirectory();
-		});
-	}
 
 	var random;
 	function startRandom() {
@@ -76,26 +28,22 @@ angular.module('WallpaperCurator.main')
 		Backend.setWallpaper(path);
 	}
 
-	$scope.setDirectory = setDirectory;
-	$scope.hasDupes = hasDupes;
-	$scope.toggleDupe = toggleDupe;
-	$scope.purge = purge;
 	$scope.startRandom = startRandom;
 	$scope.stopRandom = stopRandom;
 	$scope.isRunning = false;
-
 	$scope.initialized = false;
 
 
-	Backend.getFiles($scope.data.dir).then(function(response) {
-		$scope.$apply(function(){
-			$scope.response = response.status;
-			if (response.files) {
-				allFiles = response.files;
+	// Backend.getFiles($scope.data.dir).then(function(response) {
+	// 	$scope.$apply(function(){
+	// 		if (response.files) {
+	// 			allFiles = response.files;
+	// 			$scope.initialized = true;
+	// 		}
+	// 	});
+	// });
+	
 				$scope.initialized = true;
-			}
-		});
-	});
 
 	
 	$scope.debug = function(data) {

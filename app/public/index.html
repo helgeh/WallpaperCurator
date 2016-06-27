@@ -16,30 +16,10 @@
 		<p>Loading!</p>
 	</div>
 
-	<input type="text" ng-model="data.dir">
-	<button ng-click="setDirectory()">Check for duplicates</button> 
-	<button ng-click="purge()">Purge all selected</button>
 	<button ng-click="isRunning ? stopRandom() : startRandom()">{{ isRunning ? 'Stop' : 'Start' }}</button>
-	<p>{{ response }}</p>
+	
+	<local-files data="data"></local-files>
 
-	<div class="dupe-images">
-		<div ng-if="!hasDupes()">
-			No duplicates!
-		</div>
-		<ul>
-			<li ng-repeat="files in data.dupes" class="row">
-				<ul>
-					<li ng-repeat="file in files" class="col-xs-3 col-md-2 col-lg-1">
-						<a href="#" class="thumbnail" ng-class="{toggled: file.toggled}" ng-click="toggleDupe(file); $event.preventDefault();">
-							<img ng-src="{{file.path}}" />
-							<span>{{ file.fileName }}</span> | 
-							<span>{{ file.dim.width }}x{{ file.dim.height }}</span>
-						</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</div>
 </div>
 
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -55,6 +35,7 @@
 <script src="./files/files.service.js"></script>
 <script src="./main/main.module.js"></script>
 <script src="./main/main.controller.js"></script>
+<script src="./main/local/local.component.js"></script>
 
 </body>
 </html>
