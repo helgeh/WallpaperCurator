@@ -2,7 +2,7 @@
 
 angular.module('WallpaperCurator.main')
 
-.controller('MainCtrl', function($scope, $http, $interval, Backend) {
+.controller('MainCtrl', function($scope, $interval, Backend) {
 
 	var allFiles;
 

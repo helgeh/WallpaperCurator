@@ -1,7 +1,7 @@
 
 angular.module('WallpaperCurator.files')
 
-.factory('Backend', function () {
+.factory('Backend', function BackendFactory () {
 	var q = require('q');
 	var fs = require('fs');
 	var path = require('path');
