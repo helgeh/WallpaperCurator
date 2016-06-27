@@ -5,7 +5,6 @@ angular.module('WallpaperCurator.files')
 	var q = require('q');
 	var fs = require('fs');
 	var path = require('path');
-	var win = nw.Window.get();
 
 	var wallpaper = require('wallpaper');
 
@@ -79,7 +78,6 @@ angular.module('WallpaperCurator.files')
 	}
 
 	return {
-		win: win,
 		getFiles: getFiles,
 		deleteFiles: deleteFiles,
 		setWallpaper: setWallpaper
