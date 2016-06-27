@@ -56,10 +56,6 @@ angular.module('WallpaperCurator.main')
 		});
 	}
 
-	function reload() {
-		Backend.win.reload();
-	}
-
 	var random;
 	function startRandom() {
 		random = $interval(setNextWallpaper, 10000, 10);
@@ -84,7 +80,6 @@ angular.module('WallpaperCurator.main')
 	$scope.hasDupes = hasDupes;
 	$scope.toggleDupe = toggleDupe;
 	$scope.purge = purge;
-	$scope.reload = reload;
 	$scope.startRandom = startRandom;
 	$scope.stopRandom = stopRandom;
 	$scope.isRunning = false;
