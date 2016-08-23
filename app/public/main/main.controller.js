@@ -8,16 +8,21 @@ angular.module('WallpaperCurator.main')
 		dir: 'D:\\test\\'
 	};
 
+	$scope.app = {
+		isRunning: false,
+		initialized: false
+	};
+
 	var random;
 	function startRandom() {
 		random = $interval(setNextWallpaper, 10000, 10);
-		$scope.isRunning = true;
+		$scope.app.isRunning = true;
 	}
 
 	function stopRandom() {
 		$interval.cancel(random);
 		random = null;
-		$scope.isRunning = false;
+		$scope.app.isRunning = false;
 	}
 
 	var counter = 0;
@@ -30,8 +35,6 @@ angular.module('WallpaperCurator.main')
 
 	$scope.startRandom = startRandom;
 	$scope.stopRandom = stopRandom;
-	$scope.isRunning = false;
-	$scope.initialized = false;
 
 
 	// Backend.getFiles($scope.data.dir).then(function(response) {
@@ -43,7 +46,7 @@ angular.module('WallpaperCurator.main')
 	// 	});
 	// });
 	
-				$scope.initialized = true;
+	$scope.app.initialized = true;
 
 	
 	$scope.debug = function(data) {
