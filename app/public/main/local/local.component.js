@@ -1,7 +1,5 @@
 'use strict';
 
-angular.module('WallpaperCurator.main')
-
 function LocalController($scope, Backend) {
 
 	var allFiles;
