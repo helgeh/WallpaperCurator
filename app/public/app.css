@@ -1,11 +1,28 @@
+
+html, body {
+    height: 100%;
+}
+
 body {
-	background-color: initial;
+    background-color: initial;
+    border: 3px solid greenyellow;
+}
+
+body:before {
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid #ffea00;
 }
 
 .init * {
-	display: none;
+    display: none;
 }
 
 .init .loader {
-	display: block;
+    display: block;
 }

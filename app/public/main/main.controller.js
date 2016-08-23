@@ -2,7 +2,7 @@
 
 angular.module('WallpaperCurator.main')
 
-.controller('MainCtrl', function($scope, $interval, Backend) {
+.controller('MainCtrl', function($scope, $window, $interval, Backend) {
 
 	$scope.data = {
 		dir: 'D:\\test\\'
@@ -45,6 +45,8 @@ angular.module('WallpaperCurator.main')
 	// 		}
 	// 	});
 	// });
+
+	$window.resizeTo($window.screen.availWidth, $window.screen.availHeight)
 	
 	$scope.app.initialized = true;
 
