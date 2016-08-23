@@ -10,13 +10,13 @@
 	<link rel="stylesheet" type="text/css" href="./main/main.css">
 </head>
 <body>
-<div ng-controller="MainCtrl" ng-class="{init: !initialized}" class="main">
+<div ng-controller="MainCtrl" ng-class="{init: !app.initialized}" class="main">
 
-	<div class="well loader" ng-hide="initialized">
+	<div class="well loader" ng-hide="app.initialized">
 		<p>Loading!</p>
 	</div>
 
-	<button ng-click="isRunning ? stopRandom() : startRandom()">{{ isRunning ? 'Stop' : 'Start' }}</button>
+	<button ng-click="app.isRunning ? stopRandom() : startRandom()">{{ app.isRunning ? 'Stop' : 'Start' }}</button>
 	
 	<local-files data="data"></local-files>
 
