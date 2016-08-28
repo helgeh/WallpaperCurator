@@ -37,8 +37,5 @@ angular.module('WallpaperCurator.dupes', [])
 
 .component('dupeFiles', {
 	templateUrl: './dupes/dupes.html',
-	controller: DupesController,
-	bindings: {
-		'data': '='
-	}
+	controller: DupesController
 });
