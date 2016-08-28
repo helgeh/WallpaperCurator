@@ -115,9 +115,14 @@ angular.module('WallpaperCurator.files')
     return init(currentDirectory);
   }
 
+  function shuffle() {
+    allFiles = _.shuffle(allFiles);
+  }
+
   return {
     init: init,
     reload: reload,
+    shuffle: shuffle,
     setNextWallpaper: setNextWallpaper,
     getDuplicatesOfCurrentDir, getDuplicatesOfCurrentDir,
     deleteFiles: deleteFiles
