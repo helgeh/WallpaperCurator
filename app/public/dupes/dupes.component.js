@@ -2,6 +2,8 @@
 
 function DupesController($scope, $rootScope, Backend) {
 
+  $scope.data = {};
+
 	function hasDupes() {
 		return _.keys($scope.data.dupes).length > 0;
 	}
