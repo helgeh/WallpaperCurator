@@ -5,6 +5,7 @@ var _ = require('lodash');
 angular.module('WallpaperCurator', [
 	'WallpaperCurator.slideshow',
 	'WallpaperCurator.files',
+  'WallpaperCurator.dupes',
 	'WallpaperCurator.assets'
 ])
 

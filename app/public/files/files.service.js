@@ -62,6 +62,20 @@ angular.module('WallpaperCurator.files')
     return deferred.promise;
   };
 
+  function getDuplicatesOfCurrentDir() {
+    var sorted = _.sortBy(_.sortBy(allFiles, 'fileName.size').reverse(), 'size');
+    return _.reduce(sorted, function(result, item, index, coll) {
+      var dupes = _.filter(coll, {size: item.size});
+      if (dupes && dupes.length > 1) {
+        var min = _.min(_.map(dupes, 'fileName.length'));
+        var firstOfItsSize = !(result[item.size]);
+        item.toggled = !firstOfItsSize;
+        (result[item.size] || (result[item.size] = [])).push(item);
+      }
+      return result;
+    }, {});
+  }
+
   function deleteFiles(files) {
     var deferred = q.defer();
     var done = _.after(files.length, deferred.resolve);
@@ -79,7 +93,6 @@ angular.module('WallpaperCurator.files')
 
   var counter = 0;
   function setNextWallpaper() {
-    // counter = Math.min(allFiles.length-1, counter+1);
     counter = counter+1;
     if (counter > allFiles.length-1)
       counter = 0;
@@ -101,10 +114,15 @@ angular.module('WallpaperCurator.files')
     return deferred.promise;
   }
 
+  function reload() {
+    return init(currentDirectory);
+  }
+
   return {
-    // getFiles: getFiles,
-    // deleteFiles: deleteFiles,
     init: init,
-    setNextWallpaper: setNextWallpaper
+    reload: reload,
+    setNextWallpaper: setNextWallpaper,
+    getDuplicatesOfCurrentDir, getDuplicatesOfCurrentDir,
+    deleteFiles: deleteFiles
   };
 });

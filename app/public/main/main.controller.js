@@ -4,55 +4,38 @@ angular.module('WallpaperCurator.main')
 
 .controller('MainCtrl', function($scope, $window, $interval, Backend) {
 
-	$scope.data = {
-		dir: 'D:\\test\\'
-	};
+  var slideShowIntervalTime = 10000,
+    timer;
 
-	$scope.app = {
-		isRunning: false,
-		initialized: false
-	};
+  $scope.data = {
+    dir: 'D:\\TEMP\\pics'
+  };
 
-	var random;
-	function startRandom() {
-		random = $interval(setNextWallpaper, 10000, 10);
-		$scope.app.isRunning = true;
-	}
+  $scope.app = {
+    isRunning: false,
+    initialized: false
+  };
 
-	function stopRandom() {
-		$interval.cancel(random);
-		random = null;
-		$scope.app.isRunning = false;
-	}
+  function start() {
+    timer = $interval(Backend.setNextWallpaper, slideShowIntervalTime);
+    $scope.app.isRunning = true;
+  }
 
-	var counter = 0;
-	function setNextWallpaper() {
-		counter = Math.min(allFiles.length-1, counter+1);
-		var path = allFiles[counter].path;
-		path = path.replace(/\\/g, '\\\\');
-		Backend.setWallpaper(path);
-	}
+  function stop() {
+    $interval.cancel(timer);
+    timer = null;
+    $scope.app.isRunning = false;
+  }
 
-	$scope.startRandom = startRandom;
-	$scope.stopRandom = stopRandom;
+  $scope.start = start;
+  $scope.stop = stop;
 
+  $window.resizeTo($window.screen.availWidth, $window.screen.availHeight)
 
-	// Backend.getFiles($scope.data.dir).then(function(response) {
-	// 	$scope.$apply(function(){
-	// 		if (response.files) {
-	// 			allFiles = response.files;
-	// 			$scope.initialized = true;
-	// 		}
-	// 	});
-	// });
-
-	$window.resizeTo($window.screen.availWidth, $window.screen.availHeight)
-	
-	$scope.app.initialized = true;
-
-	
-	$scope.debug = function(data) {
-		return JSON.stringify(data, null, 2);
-	};
+  Backend.init($scope.data.dir).then(function() {
+    $scope.$apply(function() {
+      $scope.app.initialized = true;
+    });
+  });
 
 });

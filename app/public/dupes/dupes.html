@@ -1,6 +1,4 @@
-
-	<input type="text" ng-model="data.dir">
-	<button ng-click="setDirectory()">Check for duplicates</button> 
+<div ng-show="hasDupes()">
 	<button ng-click="purge()">Purge all selected</button>
 
 	<div class="dupe-images">
@@ -10,7 +8,7 @@
 					<li ng-repeat="file in files" class="col-xs-3 col-md-2 col-lg-1">
 						<a href="#" class="thumbnail" ng-class="{toggled: file.toggled}" ng-click="toggleDupe(file); $event.preventDefault();">
 							<img ng-src="{{file.path}}" />
-							<span>{{ file.fileName }}</span> | 
+							<span>{{ file.fileName }}</span> |
 							<span>{{ file.dim.width }}x{{ file.dim.height }}</span>
 						</a>
 					</li>
@@ -18,3 +16,4 @@
 			</li>
 		</ul>
 	</div>
+</div>
