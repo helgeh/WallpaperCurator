@@ -2,84 +2,109 @@
 angular.module('WallpaperCurator.files')
 
 .factory('Backend', function BackendFactory () {
-	var q = require('q');
-	var fs = require('fs');
-	var path = require('path');
+  var q = require('q');
+  var fs = require('fs');
+  var path = require('path');
 
-	var wallpaper = require('wallpaper');
+  var wallpaper = require('wallpaper');
 
+  var allFiles = [];
+  var currentDirectory;
 
-	var currentDirectory;
+  function getFiles(dir) {
+    currentDirectory = dir;
+    return readDir()
+    .then(getDimensions);
+  }
 
-	function getFiles(dir) {
-		currentDirectory = dir;
-		return readDir()
-			.then(getDimensions);
-	}
+  var getDimensions = function(response) {
+    var files = response.files;
+    var deferred = q.defer();
+    var errs = [];
+    var done = _.after(files.length, function() {
+      if (errs.length > 0)
+        deferred.resolve({status: 'errors', files: files, errs: errs});
+      else
+        deferred.resolve({status: 'ok', files: files});
+    });
+    _.forEach(files, function(file){
+      var sizeOf = require('image-size');
+      var dimensions = sizeOf(file.path);
+      if (dimensions)
+        file.dim = dimensions;
+      else
+        errs.push(new Error('Could not find dimensions for image ' + file.path));
+      done();
+    });
+    return deferred.promise;
+  };
 
-	var getDimensions = function(response) {
-		var files = response.files;
-		var deferred = q.defer();
-		var errs = [];
-		var done = _.after(files.length, function() {
-			if (errs.length > 0) 
-				deferred.resolve({status: 'errors', files: files, errs: errs});
-			else 
-				deferred.resolve({status: 'ok', files: files});
-		});
-		_.forEach(files, function(file){
-			var sizeOf = require('image-size');
-			var dimensions = sizeOf(file.path);
-			if (dimensions) 
-				file.dim = dimensions;
-			else
-				errs.push(new Error('Could not find dimensions for image ' + file.path));
-			done();
-		});
-		return deferred.promise;
-	};
+  var readDir = function() {
+    var deferred = q.defer();
+    var allFiles;
+    fs.readdir(currentDirectory, function (err, files) {
+      if (err) {
+        deferred.reject(new Error(err));
+        throw err;
+      }
+      allFiles = files.map(function (file) {
+        return {path: path.join(currentDirectory, file), fileName: file};
+      }).filter(function (file) {
+        return fs.statSync(file.path).isFile();
+      }).map(function(file) {
+        var stats = fs.statSync(file.path);
+        file.stats = stats;
+        file.size = stats.size;
+        return file;
+      });
+      deferred.resolve({status: 'ok', files: allFiles});
+    });
+    return deferred.promise;
+  };
 
-	var readDir = function() {
-		var deferred = q.defer();
-		var allFiles;
-		fs.readdir(currentDirectory, function (err, files) {
-			if (err) {
-				deferred.reject(new Error(err));
-				throw err;
-			}
-			allFiles = files.map(function (file) {
-				return {path: path.join(currentDirectory, file), fileName: file};
-			}).filter(function (file) {
-				return fs.statSync(file.path).isFile();
-			}).map(function(file) {
-				var stats = fs.statSync(file.path);
-				file.stats = stats;
-				file.size = stats.size;
-				return file;
-			});
-			deferred.resolve({status: 'ok', files: allFiles});
-		});
-		return deferred.promise;
-	};
+  function deleteFiles(files) {
+    var deferred = q.defer();
+    var done = _.after(files.length, deferred.resolve);
+    _.forEach(files, function(file) {
+      fs.unlink(file.path, done);
+    });
+    return deferred.promise;
+  }
 
-	function deleteFiles(files) {
-		var deferred = q.defer();
-		var done = _.after(files.length, deferred.resolve);
-		_.forEach(files, function(file) {
-			fs.unlink(file.path, done);
-		});
-		return deferred.promise;
-	}
+  function setWallpaper(path) {
+    wallpaper.set(path).then(function(){
+      console.log("Wallpaper has changed!");
+    });
+  }
 
-	function setWallpaper(path) {
-		wallpaper.set(path).then(function(){
-			console.log("done!");
-		});
-	}
+  var counter = 0;
+  function setNextWallpaper() {
+    // counter = Math.min(allFiles.length-1, counter+1);
+    counter = counter+1;
+    if (counter > allFiles.length-1)
+      counter = 0;
+    var path = allFiles[counter].path;
+    path = path.replace(/\\/g, '\\\\');
+    setWallpaper(path);
+  }
 
-	return {
-		getFiles: getFiles,
-		deleteFiles: deleteFiles,
-		setWallpaper: setWallpaper
-	};
+  function init(dir) {
+    var deferred = q.defer();
+    getFiles(dir).then(function(response) {
+      if (response.files) {
+        allFiles = response.files;
+        deferred.resolve();
+      }
+      else
+        deferred.reject();
+    });
+    return deferred.promise;
+  }
+
+  return {
+    // getFiles: getFiles,
+    // deleteFiles: deleteFiles,
+    init: init,
+    setNextWallpaper: setNextWallpaper
+  };
 });

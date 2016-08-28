@@ -3,7 +3,7 @@
 var _ = require('lodash');
 
 angular.module('WallpaperCurator', [
-	'WallpaperCurator.main',
+	'WallpaperCurator.slideshow',
 	'WallpaperCurator.files',
 	'WallpaperCurator.assets'
 ])
