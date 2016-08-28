@@ -10,26 +10,44 @@ function DupesController($scope, $rootScope, Backend) {
 		file.toggled = !file.toggled;
 	}
 
+  function isItemToggled(item) {
+    return item.toggled;
+  }
+
 	function purge() {
-		var toDelete = _.reduce($scope.data.dupes, function(result, value/*, key*/) {
-			_.filter(value, function(item){ return item.toggled; })
-			.forEach(function(item){result.push(item);});
-			return result;
-		}, []);
-		Backend.deleteFiles(toDelete).then(function () {
-      Backend.reload().then(function(){
-        $scope.$apply(function(){
-          $scope.data.dupes = Backend.getDuplicatesOfCurrentDir();
-        });
-      });
-		});
+		var toDelete = getSelectedFiles();
+		Backend.deleteFiles(toDelete).then(reload);
 	}
 
-  $scope.data = {dupes: Backend.getDuplicatesOfCurrentDir()};
+  $scope.hasDupes = hasDupes;
+  $scope.toggleDupe = toggleDupe;
+  $scope.isItemToggled = isItemToggled;
+  $scope.purge = purge;
 
-	$scope.hasDupes = hasDupes;
-	$scope.toggleDupe = toggleDupe;
-	$scope.purge = purge;
+
+  function getSelectedFiles() {
+    return _.reduce($scope.data.dupes, function(result, value/*, key*/) {
+      _.filter(value, isItemToggled)
+        .forEach(function(item){
+          result.push(item);
+        });
+      return result;
+    }, []);
+  }
+
+  function reload() {
+    Backend.reload().then(function() {
+      $scope.$apply(updateDupes);
+    });
+  }
+
+  function updateDupes() {
+    if (!$scope.data)
+      $scope.data = {};
+    $scope.data.dupes = Backend.getDuplicatesOfCurrentDir();
+  }
+
+  updateDupes();
 
 }
 
