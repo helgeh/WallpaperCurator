@@ -1,3 +1,4 @@
+'use strict';
 
 angular.module('WallpaperCurator.files')
 
@@ -5,7 +6,6 @@ angular.module('WallpaperCurator.files')
   var q = require('q');
   var fs = require('fs');
   var path = require('path');
-
   var wallpaper = require('wallpaper');
 
   var allFiles = [];
@@ -48,14 +48,11 @@ angular.module('WallpaperCurator.files')
         throw err;
       }
       allFiles = files.map(function (file) {
-        return {path: path.join(currentDirectory, file), fileName: file};
+        var p = path.join(currentDirectory, file);
+        var stats = fs.statSync(p);
+        return {path: p, fileName: file, stats: stats, size: stats.size};
       }).filter(function (file) {
-        return fs.statSync(file.path).isFile();
-      }).map(function(file) {
-        var stats = fs.statSync(file.path);
-        file.stats = stats;
-        file.size = stats.size;
-        return file;
+        return file.stats.isFile();
       });
       deferred.resolve({status: 'ok', files: allFiles});
     });
