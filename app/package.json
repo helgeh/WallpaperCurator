@@ -17,13 +17,5 @@
   },
   "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36",
   "chromium-args": "--disable-web-security",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "image-size": "^0.5.0",
-    "lodash": "^4.11.1",
-    "q": "^1.4.1",
-    "wallpaper": "^2.1.1"
-  }
+  "license": "ISC"
 }
