@@ -27,12 +27,23 @@ angular.module('WallpaperCurator.main')
     $scope.app.isRunning = false;
   }
 
+  function prev() {
+    stop();
+    Backend.setPrevWallpaper();
+  }
+
+  function next() {
+    Backend.setNextWallpaper();
+  }
+
   function shuffle() {
     Backend.shuffle();
   }
 
   $scope.start = start;
   $scope.stop = stop;
+  $scope.prev = prev;
+  $scope.next = next;
   $scope.shuffle = shuffle;
 
   $window.resizeTo($window.screen.availWidth, $window.screen.availHeight)

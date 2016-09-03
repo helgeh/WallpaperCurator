@@ -97,9 +97,11 @@ angular.module('WallpaperCurator.files')
     return deferred.promise;
   }
 
-  function setWallpaper(path) {
+  function setWallpaper(index) {
     var deferred = q.defer();
-    wallpaper.set(path).then(function(){
+    var file = allFiles[index].path;
+    file = file.replace(/\\/g, '\\\\');
+    wallpaper.set(file).then(function(){
       console.log("Wallpaper has changed!");
       deferred.resolve('Wallpaper changed!');
     }, deferred.reject);
@@ -111,9 +113,14 @@ angular.module('WallpaperCurator.files')
     counter = counter+1;
     if (counter > allFiles.length-1)
       counter = 0;
-    var path = allFiles[counter].path;
-    path = path.replace(/\\/g, '\\\\');
-    return setWallpaper(path);
+    return setWallpaper(counter);
+  }
+
+  function setPrevWallpaper() {
+    counter = counter-1;
+    if (counter < 0)
+      counter = allFiles.length-1;
+    return setWallpaper(counter);
   }
 
   function init(dir) {
@@ -145,6 +152,7 @@ angular.module('WallpaperCurator.files')
     reload: reload,
     shuffle: shuffle,
     setNextWallpaper: setNextWallpaper,
+    setPrevWallpaper: setPrevWallpaper,
     getDuplicatesOfCurrentDir, getDuplicatesOfCurrentDir,
     deleteFiles: deleteFiles
   };

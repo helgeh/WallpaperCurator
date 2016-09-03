@@ -14,7 +14,9 @@
 <body>
 <div ng-controller="MainCtrl" ng-class="{init: !app.initialized}" class="main">
 
+  <button ng-click="prev()">Prev</button>
 	<button ng-click="app.isRunning ? stop() : start()">{{ app.isRunning ? 'Stop' : 'Start' }}</button>
+  <button ng-click="next()">Next</button> |
   <button ng-click="shuffle()">Shuffle</button>
 
   <window-controls></window-controls>
