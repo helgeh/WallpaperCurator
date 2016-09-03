@@ -44,8 +44,6 @@ function DupesController($scope, $rootScope, Backend) {
   }
 
   function updateDupes() {
-    if (!$scope.data)
-      $scope.data = {};
     $scope.data.dupes = Backend.getDuplicatesOfCurrentDir();
   }
 
