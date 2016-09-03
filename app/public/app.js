@@ -6,7 +6,9 @@ angular.module('WallpaperCurator', [
 	'WallpaperCurator.slideshow',
 	'WallpaperCurator.files',
   'WallpaperCurator.dupes',
-	'WallpaperCurator.assets'
+	'WallpaperCurator.assets',
+  'WallpaperCurator.desktop',
+  'WallpaperCurator.controls'
 ])
 
 .config(function($compileProvider) {

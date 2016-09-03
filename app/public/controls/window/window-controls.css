@@ -1,0 +1,28 @@
+
+window-controls {
+  position: absolute;
+  right: 10px;
+  top: 3px;
+}
+
+window-controls ul {
+  background: greenyellow;
+  padding: 0 5px 2px;
+}
+window-controls li {
+  width: 40px;
+  background: white;
+  display: inline-block;
+  text-align: center;
+  height: 20px;
+  line-height: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+window-controls li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
