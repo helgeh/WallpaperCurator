@@ -2,5 +2,4 @@
 
 angular.module('WallpaperCurator.main', [
 	'WallpaperCurator.files',
-	'WallpaperCurator.desktop'
 ]);

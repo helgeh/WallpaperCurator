@@ -7,12 +7,12 @@
 	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./app.css">
-	<link rel="stylesheet" href="./slideshow/slideshow.css">
+	<link rel="stylesheet" href="./main/main.css">
   <link rel="stylesheet" href="./dupes/dupes.css">
   <link rel="stylesheet" href="./controls/window/window-controls.css">
 </head>
 <body>
-<div ng-controller="SlideshowCtrl" ng-class="{init: !app.initialized}" class="main">
+<div ng-controller="MainCtrl" ng-class="{init: !app.initialized}" class="main">
 
 	<button ng-click="app.isRunning ? stop() : start()">{{ app.isRunning ? 'Stop' : 'Start' }}</button>
   <button ng-click="shuffle()">Shuffle</button>
@@ -40,8 +40,8 @@
 <script src="./files/files.module.js"></script>
 <script src="./files/files.service.js"></script>
 <script src="./dupes/dupes.component.js"></script>
-<script src="./slideshow/slideshow.module.js"></script>
-<script src="./slideshow/slideshow.controller.js"></script>
+<script src="./main/main.module.js"></script>
+<script src="./main/main.controller.js"></script>
 
 </body>
 </html>
