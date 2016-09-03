@@ -75,8 +75,6 @@ angular.module('WallpaperCurator.files')
     console.log('finding duplicates in currentDirectory');
     var sorted = _.sortBy(_.sortBy(allFiles, 'fileName.size').reverse(), 'size');
     return _.reduce(sorted, function(result, item, index, coll) {
-      if ( ! item.stats.isFile())
-        return result;
       var dupes = _.filter(coll, {size: item.size});
       if (dupes && dupes.length > 1) {
         console.log('  found ' + dupes.length + ' duplicate images!', item, dupes);
