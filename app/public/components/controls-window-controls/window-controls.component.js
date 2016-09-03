@@ -15,6 +15,6 @@ angular.module('WallpaperCurator.controls', [
 ])
 
 .component('windowControls', {
-  templateUrl: 'controls/window/window-controls.html',
+  templateUrl: 'components/controls-window-controls/window-controls.html',
   controller: WindowControlsController
 });

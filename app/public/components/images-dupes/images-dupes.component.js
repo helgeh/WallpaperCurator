@@ -1,6 +1,6 @@
 'use strict';
 
-function DupesController($scope, $rootScope, Backend) {
+function DupesController($scope, $rootScope, Images) {
 
   $scope.data = {};
 
@@ -18,7 +18,7 @@ function DupesController($scope, $rootScope, Backend) {
 
 	function purge() {
 		var toDelete = getSelectedFiles();
-		Backend.deleteFiles(toDelete).then(reload);
+		Images.deleteFiles(toDelete).then(reload);
 	}
 
   $scope.hasDupes = hasDupes;
@@ -38,22 +38,24 @@ function DupesController($scope, $rootScope, Backend) {
   }
 
   function reload() {
-    Backend.reload().then(function() {
+    Images.reload().then(function() {
       $scope.$apply(updateDupes);
     });
   }
 
   function updateDupes() {
-    $scope.data.dupes = Backend.getDuplicatesOfCurrentDir();
+    $scope.data.dupes = Images.getDuplicatesOfCurrentDir();
   }
 
   updateDupes();
 
 }
 
-angular.module('WallpaperCurator.dupes', [])
+angular.module('WallpaperCurator.imageDupes', [
+  'WallpaperCurator.images'
+])
 
-.component('dupeFiles', {
-	templateUrl: './dupes/dupes.html',
+.component('dupeImages', {
+	templateUrl: './components/images-dupes/images-dupes.html',
 	controller: DupesController
 });

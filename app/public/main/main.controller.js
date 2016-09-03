@@ -2,7 +2,7 @@
 
 angular.module('WallpaperCurator.main')
 
-.controller('MainCtrl', function($scope, $window, $interval, Backend) {
+.controller('MainCtrl', function($scope, $window, $interval, Images) {
 
   var slideShowIntervalTime = 10000,
     timer;
@@ -17,7 +17,7 @@ angular.module('WallpaperCurator.main')
   };
 
   function start() {
-    timer = $interval(Backend.setNextWallpaper, slideShowIntervalTime);
+    timer = $interval(Images.setNextWallpaper, slideShowIntervalTime);
     $scope.app.isRunning = true;
   }
 
@@ -29,15 +29,15 @@ angular.module('WallpaperCurator.main')
 
   function prev() {
     stop();
-    Backend.setPrevWallpaper();
+    Images.setPrevWallpaper();
   }
 
   function next() {
-    Backend.setNextWallpaper();
+    Images.setNextWallpaper();
   }
 
   function shuffle() {
-    Backend.shuffle();
+    Images.shuffle();
   }
 
   $scope.start = start;
@@ -48,7 +48,7 @@ angular.module('WallpaperCurator.main')
 
   $window.resizeTo($window.screen.availWidth, $window.screen.availHeight)
 
-  Backend.init($scope.data.dir).then(function() {
+  Images.init($scope.data.dir).then(function() {
     $scope.$apply(function() {
       $scope.app.initialized = true;
     });

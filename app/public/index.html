@@ -8,8 +8,8 @@
 	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="./app.css">
 	<link rel="stylesheet" href="./main/main.css">
-  <link rel="stylesheet" href="./dupes/dupes.css">
-  <link rel="stylesheet" href="./controls/window/window-controls.css">
+  <link rel="stylesheet" href="./components/images-dupes/images-dupes.css">
+  <link rel="stylesheet" href="./components/controls-window-controls/window-controls.css">
 </head>
 <body>
 <div ng-controller="MainCtrl" ng-class="{init: !app.initialized}" class="main">
@@ -25,7 +25,7 @@
     <p>Loading!</p>
   </div>
 
-  <dupe-files></dupe-files>
+  <dupe-images class="clearfix"></dupe-images>
 
 </div>
 
@@ -36,12 +36,12 @@
 
 <script src="./app.js"></script>
 <script src="./assets/assets.module.js"></script>
-<script src="./desktop/desktop.module.js"></script>
-<script src="./desktop/desktop.service.js"></script>
-<script src="./controls/window/window-controls.component.js"></script>
-<script src="./files/files.module.js"></script>
-<script src="./files/files.service.js"></script>
-<script src="./dupes/dupes.component.js"></script>
+<script src="./services/desktop/desktop.module.js"></script>
+<script src="./services/desktop/desktop.service.js"></script>
+<script src="./components/controls-window-controls/window-controls.component.js"></script>
+<script src="./services/images/images.module.js"></script>
+<script src="./services/images/images.service.js"></script>
+<script src="./components/images-dupes/images-dupes.component.js"></script>
 <script src="./main/main.module.js"></script>
 <script src="./main/main.controller.js"></script>
 

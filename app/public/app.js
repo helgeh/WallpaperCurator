@@ -4,8 +4,8 @@ var _ = require('lodash');
 
 angular.module('WallpaperCurator', [
 	'WallpaperCurator.main',
-	'WallpaperCurator.files',
-  'WallpaperCurator.dupes',
+	'WallpaperCurator.images',
+  'WallpaperCurator.imageDupes',
 	'WallpaperCurator.assets',
   'WallpaperCurator.desktop',
   'WallpaperCurator.controls'

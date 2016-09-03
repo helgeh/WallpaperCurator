@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('WallpaperCurator.files')
+angular.module('WallpaperCurator.images')
 
-.factory('Backend', function BackendFactory () {
+.factory('Images', function ImagesFactory () {
   var q = require('q');
   var fs = require('fs');
   var path = require('path');
@@ -77,7 +77,6 @@ angular.module('WallpaperCurator.files')
     return _.reduce(sorted, function(result, item, index, coll) {
       var dupes = _.filter(coll, {size: item.size});
       if (dupes && dupes.length > 1) {
-        console.log('  found ' + dupes.length + ' duplicate images!', item, dupes);
         var min = _.min(_.map(dupes, 'fileName.length'));
         var firstOfItsSize = !(result[item.size]);
         item.toggled = !firstOfItsSize;
@@ -124,7 +123,7 @@ angular.module('WallpaperCurator.files')
   }
 
   function init(dir) {
-    console.log('Initing Backend Service');
+    console.log('Initing Images Service');
     var deferred = q.defer();
     getFiles(dir).then(function(response) {
       if (response.files) {
