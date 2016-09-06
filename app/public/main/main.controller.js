@@ -4,12 +4,19 @@ angular.module('WallpaperCurator.main')
 
 .controller('MainCtrl', function($scope, $window, $interval, Images) {
 
-  var slideShowIntervalTime = 10000,
-    timer;
+  var timer;
 
   $scope.data = {
     dir: 'D:\\TEMP\\pics'
   };
+  $scope.data.intervalOptions = [
+    {time: 0.1666, label: "10 seconds"},
+    {time: 3, label: "3 min"},
+    {time: 10, label: "10 min"},
+    {time: 30, label: "30 min"},
+    {time: 60, label: "60 min"}
+  ];
+  $scope.data.intervalTime = $scope.data.intervalOptions[0];
 
   $scope.app = {
     isRunning: false,
@@ -17,8 +24,12 @@ angular.module('WallpaperCurator.main')
   };
 
   function start() {
-    timer = $interval(Images.setNextWallpaper, slideShowIntervalTime);
+    timer = $interval(Images.setNextWallpaper, getIntervalTime());
     $scope.app.isRunning = true;
+  }
+
+  function getIntervalTime() {
+    return $scope.data.intervalTime.time * 60 * 1000;
   }
 
   function stop() {

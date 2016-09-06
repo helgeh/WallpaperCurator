@@ -18,6 +18,7 @@
 	<button ng-click="app.isRunning ? stop() : start()">{{ app.isRunning ? 'Stop' : 'Start' }}</button>
   <button ng-click="next()">Next</button> |
   <button ng-click="shuffle()">Shuffle</button>
+  <select ng-options="opt.label for opt in data.intervalOptions" ng-model="data.intervalTime"></select>
 
   <window-controls></window-controls>
 
