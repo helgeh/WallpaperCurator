@@ -52,6 +52,8 @@ angular.module('WallpaperCurator.main')
     $scope.$apply(function() {
       $scope.app.initialized = true;
     });
+  }, function (err) {
+    console.log(err);
   });
 
 });

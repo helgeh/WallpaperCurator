@@ -44,10 +44,11 @@ function DupesController($scope, $rootScope, Images) {
   }
 
   function updateDupes() {
-    $scope.data.dupes = Images.getDuplicatesOfCurrentDir();
+    $scope.data.dupes = Images.getDupes();
   }
 
-  updateDupes();
+  // updateDupes();
+  $rootScope.$on('directory_loaded', updateDupes);
 
 }
 

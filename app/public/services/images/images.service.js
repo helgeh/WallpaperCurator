@@ -2,7 +2,7 @@
 
 angular.module('WallpaperCurator.images')
 
-.factory('Images', function ImagesFactory () {
+.factory('Images', function ImagesFactory ($rootScope) {
   var q = require('q');
   var fs = require('fs');
   var path = require('path');
@@ -11,29 +11,51 @@ angular.module('WallpaperCurator.images')
   var sizeOf = require('image-size');
 
   var allFiles = [];
+  var allDupes = [];
   var currentDirectory;
 
-  function getFiles(dir) {
-    currentDirectory = dir;
-    console.log('new currentDirectory: ' + dir);
-    return readDir()
-      .then(getDimensions);
+  function setFiles(files) {
+    allFiles = files;
+    $rootScope.$broadcast('directory_loaded', files);
   }
 
-  var getDimensions = function(response) {
+  function getFiles() {
+    return allFiles;
+  }
+
+  function getDupes() {
+    return allDupes;
+  }
+
+  function readDir(dir) {
+    console.log('reading currentDirectory...');
+    var deferred = q.defer();
+    currentDirectory = dir;
+    fs.readdir(currentDirectory, function (err, files) {
+      if (err)
+        deferred.reject(new Error(err));
+      else {
+        deferred.resolve(_(files).map(function (file) {
+          var p = path.join(currentDirectory, file);
+          var stats = fs.statSync(p);
+          return {path: p, fileName: file, stats: stats, size: stats.size};
+        }).filter(function (file) {
+          return file.stats.isFile() && isImage(file.path);
+        }).value());
+      }
+    });
+    return deferred.promise;
+  }
+
+  function getDimensions(files) {
     console.log('getting image dimensions');
-    var files = response.files;
     var deferred = q.defer();
     var errs = [];
     var done = _.after(files.length, function() {
-      if (errs.length > 0) {
-        console.log('  Errors occured getting dimensions...', errs);
-        deferred.resolve({status: 'errors', files: files, errs: errs});
-      }
-      else {
-        console.log('  done getting dimensions');
-        deferred.resolve({status: 'ok', files: files});
-      }
+      if (errs.length > 0)
+        deferred.reject(errs);
+      else
+        deferred.resolve(files);
     });
     _.forEach(files, function(file){
       sizeOf(file.path, function(err, dimensions){
@@ -47,43 +69,24 @@ angular.module('WallpaperCurator.images')
     return deferred.promise;
   };
 
-  var readDir = function() {
-    console.log('reading currentDirectory...');
-    var deferred = q.defer();
-    var allFiles;
-    fs.readdir(currentDirectory, function (err, files) {
-      if (err) {
-        console.log('  Error reading currentDirectory ' + currentDirectory, err);
-        deferred.reject(new Error(err));
-        throw err;
-      }
-      console.log('  collecting file info');
-      allFiles = files.map(function (file) {
-        var p = path.join(currentDirectory, file);
-        var stats = fs.statSync(p);
-        return {path: p, fileName: file, stats: stats, size: stats.size};
-      }).filter(function (file) {
-        return file.stats.isFile() && isImage(file.path);
-      });
-      console.log('  files done reading');
-      deferred.resolve({status: 'ok', files: allFiles});
-    });
-    return deferred.promise;
-  };
-
-  function getDuplicatesOfCurrentDir() {
+  function getDuplicatesOfCurrentDir(files) {
     console.log('finding duplicates in currentDirectory');
-    var sorted = _.sortBy(_.sortBy(allFiles, 'fileName.size').reverse(), 'size');
-    return _.reduce(sorted, function(result, item, index, coll) {
-      var dupes = _.filter(coll, {size: item.size});
-      if (dupes && dupes.length > 1) {
-        var min = _.min(_.map(dupes, 'fileName.length'));
-        var firstOfItsSize = !(result[item.size]);
-        item.toggled = !firstOfItsSize;
-        (result[item.size] || (result[item.size] = [])).push(item);
-      }
-      return result;
-    }, {});
+    var sorted = _.sortBy(_.sortBy(files, 'fileName.size').reverse(), 'size');
+    allDupes = _.reduce(sorted, function(result, item, index, coll) {
+        var dupes = _.filter(coll, {size: item.size});
+        if (dupes && dupes.length > 1) {
+          var min = _.min(_.map(dupes, 'fileName.length'));
+          var firstOfItsSize = !(result[item.size]);
+          item.toggled = !firstOfItsSize;
+          (result[item.size] || (result[item.size] = [])).push(item);
+        }
+        return result;
+      }, {});
+    return q.when(files);
+  }
+
+  function handleReject(err) {
+    console.log(err);
   }
 
   function deleteFiles(files) {
@@ -91,7 +94,7 @@ angular.module('WallpaperCurator.images')
     var deferred = q.defer();
     var done = _.after(files.length, deferred.resolve);
     _.forEach(files, function(file) {
-      fs.unlink(file.path, done);
+      fs.unlink(file.path, done, done);
     });
     return deferred.promise;
   }
@@ -125,15 +128,12 @@ angular.module('WallpaperCurator.images')
   function init(dir) {
     console.log('Initing Images Service');
     var deferred = q.defer();
-    getFiles(dir).then(function(response) {
-      if (response.files) {
-        allFiles = response.files;
-        console.log("ALL FILES LOADED AND READY!");
-        deferred.resolve();
-      }
-      else
-        deferred.reject();
-    }, deferred.reject);
+    readDir(dir)
+      .then(getDimensions)
+      .then(getDuplicatesOfCurrentDir)
+      .then(setFiles)
+      .catch(handleReject)
+      .finally(deferred.resolve);
     return deferred.promise;
   }
 
@@ -152,7 +152,8 @@ angular.module('WallpaperCurator.images')
     shuffle: shuffle,
     setNextWallpaper: setNextWallpaper,
     setPrevWallpaper: setPrevWallpaper,
-    getDuplicatesOfCurrentDir, getDuplicatesOfCurrentDir,
+    getFiles: getFiles,
+    getDupes: getDupes,
     deleteFiles: deleteFiles
   };
 });
