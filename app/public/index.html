@@ -17,8 +17,9 @@
   <button ng-click="prev()">Prev</button>
 	<button ng-click="app.isRunning ? stop() : start()">{{ app.isRunning ? 'Stop' : 'Start' }}</button>
   <button ng-click="next()">Next</button> |
-  <button ng-click="shuffle()">Shuffle</button>
+  <button ng-click="shuffle()">Shuffle</button> |
   <select ng-options="opt.label for opt in data.intervalOptions" ng-model="data.intervalTime"></select>
+  <input type="file" webkitdirectory onchange="angular.element(this).scope().setNewDirectory(this)">
 
   <window-controls></window-controls>
 

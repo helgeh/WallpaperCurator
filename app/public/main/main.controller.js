@@ -32,6 +32,15 @@ angular.module('WallpaperCurator.main')
     return $scope.data.intervalTime.time * 60 * 1000;
   }
 
+  function setNewDirectory(element) {
+    if (element.files && element.files.length < 1)
+      return;
+    var file = element.files[0].path;
+    var dir = file.substr(0, file.lastIndexOf('\\'));
+    $scope.data.dir = dir;
+    loadDirectory();
+  }
+
   function stop() {
     $interval.cancel(timer);
     timer = null;
@@ -56,15 +65,21 @@ angular.module('WallpaperCurator.main')
   $scope.prev = prev;
   $scope.next = next;
   $scope.shuffle = shuffle;
+  $scope.setNewDirectory = setNewDirectory;
 
   $window.resizeTo($window.screen.availWidth, $window.screen.availHeight)
 
-  Images.init($scope.data.dir).then(function() {
-    $scope.$apply(function() {
-      $scope.app.initialized = true;
+  function loadDirectory() {
+    $scope.app.initialized = false;
+    Images.init($scope.data.dir).then(function() {
+      $scope.$apply(function() {
+        $scope.app.initialized = true;
+        console.log("Directory " + $scope.data.dir + " loaded and app has initialized");
+      });
+    }, function (err) {
+      console.log(err);
     });
-  }, function (err) {
-    console.log(err);
-  });
+  }
+  loadDirectory();
 
 });
